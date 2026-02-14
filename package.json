@@ -1,0 +1,59 @@
+{
+  "name": "event-driven-analytics-platform",
+  "version": "1.0.0",
+  "description": "Production-grade distributed analytics platform with Kafka, microservices, and multi-database architecture",
+  "main": "index.js",
+  "scripts": {
+    "install:all": "npm install && cd services/api-gateway && npm install && cd ../event-ingestion && npm install && cd ../analytics-worker && npm install && cd ../query-service && npm install",
+    "dev:gateway": "cd services/api-gateway && npm run start:dev",
+    "dev:ingestion": "cd services/event-ingestion && npm run start:dev",
+    "dev:worker": "cd services/analytics-worker && npm run start:dev",
+    "dev:query": "cd services/query-service && npm run start:dev",
+    "build:all": "cd services/api-gateway && npm run build && cd ../event-ingestion && npm run build && cd ../analytics-worker && npm run build && cd ../query-service && npm run build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "db:init": "node scripts/init-databases.js",
+    "db:reset": "node scripts/reset-databases.js",
+    "seed:events": "node scripts/seed-data.js",
+    "test": "npm run test --workspaces",
+    "test:integration": "node scripts/integration-test.js",
+    "test:load": "node scripts/load-test.js",
+    "k8s:apply": "kubectl apply -f k8s/",
+    "k8s:delete": "kubectl delete -f k8s/"
+  },
+  "keywords": [
+    "kafka",
+    "microservices",
+    "event-driven",
+    "analytics",
+    "distributed-systems",
+    "nestjs",
+    "graphql",
+    "cqrs",
+    "system-design"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "kafkajs": "^2.2.4",
+    "pg": "^8.11.3",
+    "mongodb": "^6.3.0",
+    "redis": "^4.6.12",
+    "@elastic/elasticsearch": "^8.11.0"
+  },
+  "workspaces": [
+    "services/api-gateway",
+    "services/event-ingestion",
+    "services/analytics-worker",
+    "services/query-service"
+  ],
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}

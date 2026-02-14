@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Engine | Live Feed</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body class="dark-theme">
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <div class="logo-wrapper">
+                    <div class="logo-icon">
+                        <div class="icon-inner"></div>
+                        <div class="icon-pulse"></div>
+                    </div>
+                </div>
+                <h1>Analytics<span>Core</span></h1>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="active"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            </nav>
+            <div class="demo-controls">
+                <p class="section-label">DEMO CONTROLS</p>
+                <button id="btn-seed" class="btn btn-primary">
+                    <i data-lucide="zap"></i> Trigger Spike
+                </button>
+                <button id="btn-reset" class="btn btn-outline">
+                    <i data-lucide="trash-2"></i> Reset Data
+                </button>
+            </div>
+            <div class="status-footer">
+                <div class="status-indicator">
+                    <span class="pulse"></span> Kafka: Connected
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="spacer"></div>
+                <div class="user-profile">
+                    <span class="date-now">Feb 14, 2026</span>
+                    <div class="avatar">A</div>
+                </div>
+            </header>
+
+            <div class="dashboard-grid">
+                <!-- Top Stats -->
+                <div class="stats-row">
+                    <div class="stat-card glass" id="card-revenue">
+                        <div class="stat-icon rev"><i data-lucide="indian-rupee"></i></div>
+                        <div class="stat-info">
+                            <label>Total Revenue</label>
+                            <h2 id="val-revenue">₹0.00</h2>
+                            <span class="trend up"><i data-lucide="arrow-up-right"></i> +12.5%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass" id="card-events">
+                        <div class="stat-icon evt"><i data-lucide="layers"></i></div>
+                        <div class="stat-info">
+                            <label>Total Events</label>
+                            <h2 id="val-events">0</h2>
+                            <span class="trend up"><i data-lucide="arrow-up-right"></i> Real-time</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass" id="card-users">
+                        <div class="stat-icon usr"><i data-lucide="users"></i></div>
+                        <div class="stat-info">
+                            <label>Active Users</label>
+                            <h2 id="val-users">0</h2>
+                            <span class="trend">Last 60m</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="charts-row">
+                    <div class="chart-container glass large">
+                        <div class="chart-header">
+                            <h3>Revenue Architecture (Live)</h3>
+                            <div class="chart-actions">
+                                <span class="badge">Real-time Feed</span>
+                            </div>
+                        </div>
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                    <div class="chart-container glass side">
+                        <div class="chart-header">
+                            <h3>Event Distribution</h3>
+                        </div>
+                        <canvas id="eventDistChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script type="module" src="./main.js"></script>
+</body>
+
+</html>

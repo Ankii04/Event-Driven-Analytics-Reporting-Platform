@@ -1,0 +1,78 @@
+{
+    "mappings": {
+        "properties": {
+            "eventId": {
+                "type": "keyword"
+            },
+            "eventType": {
+                "type": "keyword"
+            },
+            "userId": {
+                "type": "keyword"
+            },
+            "timestamp": {
+                "type": "date",
+                "format": "strict_date_optional_time||epoch_millis"
+            },
+            "data": {
+                "type": "object",
+                "enabled": true,
+                "properties": {
+                    "productId": {
+                        "type": "keyword"
+                    },
+                    "amount": {
+                        "type": "float"
+                    },
+                    "currency": {
+                        "type": "keyword"
+                    },
+                    "paymentMethod": {
+                        "type": "keyword"
+                    },
+                    "category": {
+                        "type": "keyword"
+                    },
+                    "tags": {
+                        "type": "keyword"
+                    }
+                }
+            },
+            "metadata": {
+                "type": "object",
+                "enabled": true,
+                "properties": {
+                    "ipAddress": {
+                        "type": "ip"
+                    },
+                    "userAgent": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "deviceType": {
+                        "type": "keyword"
+                    },
+                    "location": {
+                        "type": "geo_point"
+                    }
+                }
+            },
+            "createdAt": {
+                "type": "date"
+            }
+        }
+    },
+    "settings": {
+        "number_of_shards": 3,
+        "number_of_replicas": 1,
+        "refresh_interval": "5s",
+        "index": {
+            "max_result_window": 10000
+        }
+    }
+}

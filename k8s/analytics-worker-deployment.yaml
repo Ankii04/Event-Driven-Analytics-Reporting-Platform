@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analytics-worker
+  namespace: analytics-platform
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: analytics-worker
+  template:
+    metadata:
+      labels:
+        app: analytics-worker
+    spec:
+      containers:
+      - name: analytics-worker
+        image: ghcr.io/your-org/analytics-platform-analytics-worker:latest
+        envFrom:
+        - configMapRef:
+            name: analytics-config
+        - secretRef:
+            name: analytics-secrets
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: KAFKA_GROUP_ID
+          value: "analytics-worker-group"
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"

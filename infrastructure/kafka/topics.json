@@ -1,0 +1,43 @@
+{
+    "topics": [
+        {
+            "name": "user-events",
+            "partitions": 10,
+            "replicationFactor": 1,
+            "config": {
+                "retention.ms": "604800000",
+                "segment.ms": "86400000",
+                "compression.type": "snappy",
+                "max.message.bytes": "1048576",
+                "min.insync.replicas": "1"
+            },
+            "description": "Main topic for user activity events (purchases, views, clicks, etc.)"
+        },
+        {
+            "name": "user-events-dlq",
+            "partitions": 3,
+            "replicationFactor": 1,
+            "config": {
+                "retention.ms": "2592000000",
+                "compression.type": "snappy"
+            },
+            "description": "Dead Letter Queue for failed event processing"
+        },
+        {
+            "name": "analytics-commands",
+            "partitions": 5,
+            "replicationFactor": 1,
+            "config": {
+                "retention.ms": "86400000",
+                "compression.type": "snappy"
+            },
+            "description": "Commands for triggering batch analytics jobs"
+        }
+    ],
+    "notes": {
+        "partitioning_strategy": "Events are partitioned by user_id to maintain ordering per user",
+        "retention_policy": "user-events: 7 days, user-events-dlq: 30 days",
+        "compression": "Snappy compression for balance between CPU and storage",
+        "replication": "Set to 1 for local dev, increase to 3 in production"
+    }
+}
