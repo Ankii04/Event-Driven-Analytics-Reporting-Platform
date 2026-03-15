@@ -16,7 +16,7 @@
     "db:init": "node scripts/init-databases.js",
     "db:reset": "node scripts/reset-databases.js",
     "seed:events": "node scripts/seed-data.js",
-    "test": "npm run test --workspaces",
+    "test": "npm run test --workspaces --if-present",
     "test:integration": "node scripts/integration-test.js",
     "test:load": "node scripts/load-test.js",
     "k8s:apply": "kubectl apply -f k8s/",
