@@ -89,18 +89,30 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     if: github.ref == 'refs/heads/main'
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Check if KUBE_CONFIG is set
+        id: check_kube
+        run: |
+          if [ -z "${{ secrets.KUBE_CONFIG }}" ]; then
+            echo "KUBE_CONFIG secret is not set. Skipping deployment."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Configure kubectl
+        if: steps.check_kube.outputs.skip == 'false'
         uses: azure/k8s-set-context@v3
         with:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBE_CONFIG }}
 
       - name: Deploy to Kubernetes
+        if: steps.check_kube.outputs.skip == 'false'
         run: |
           kubectl apply -f k8s/
           kubectl rollout status deployment/api-gateway -n analytics-platform
@@ -109,6 +121,13 @@ jobs:
           kubectl rollout status deployment/query-service -n analytics-platform
 
       - name: Verify deployment
+        if: steps.check_kube.outputs.skip == 'false'
         run: |
           kubectl get pods -n analytics-platform
           kubectl get services -n analytics-platform
+
+      - name: Deployment skipped notice
+        if: steps.check_kube.outputs.skip == 'true'
+        run: |
+          echo "⚠️  Kubernetes deployment skipped — add KUBE_CONFIG secret to enable."
+          echo "Go to: GitHub Repo → Settings → Secrets → Actions → New secret"

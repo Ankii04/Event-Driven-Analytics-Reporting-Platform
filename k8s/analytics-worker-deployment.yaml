@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: analytics-worker
-        image: ghcr.io/your-org/analytics-platform-analytics-worker:latest
+        image: ghcr.io/ankii04/analytics-platform-analytics-worker:main
         envFrom:
         - configMapRef:
             name: analytics-config
