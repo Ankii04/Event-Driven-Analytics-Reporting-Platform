@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [main]
 
+# Grant GITHUB_TOKEN the permissions required to push to ghcr.io
+permissions:
+  contents: read
+  packages: write
+
 env:
   DOCKER_REGISTRY: ghcr.io
   IMAGE_PREFIX: ${{ github.repository_owner }}/analytics-platform
@@ -14,7 +19,7 @@ jobs:
   test:
     name: Run Tests
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -39,8 +44,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     if: github.event_name == 'push'
-    
+
     strategy:
+      fail-fast: false   # Let all 4 services build independently; one failure won't cancel the rest
       matrix:
         service: [api-gateway, event-ingestion, analytics-worker, query-service]
     
