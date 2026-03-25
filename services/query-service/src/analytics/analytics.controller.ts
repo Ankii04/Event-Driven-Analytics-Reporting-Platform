@@ -26,6 +26,7 @@ export class AnalyticsController {
     async searchEvents(
         @Query('eventType') eventType?: string,
         @Query('userId') userId?: string,
+        @Query('eventId') eventId?: string,
         @Query('startDate') startDate?: string,
         @Query('endDate') endDate?: string,
         @Query('limit') limit?: string,
@@ -33,6 +34,7 @@ export class AnalyticsController {
         return this.analyticsService.searchEvents({
             eventType,
             userId,
+            eventId,
             startDate,
             endDate,
             limit: limit ? parseInt(limit, 10) : 100,

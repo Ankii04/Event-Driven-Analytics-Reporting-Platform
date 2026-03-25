@@ -74,7 +74,16 @@ Once the **Analytics Worker** pulls an event from Kafka, it saves it to **4 spec
 | 🐘 **PostgreSQL** | **Source of Truth** | Most reliable. If everything else fails, we reset from here. It stores the *raw* event forever. |
 | 🍃 **MongoDB** | **Analytics Summary** | Great for "Aggregations". It stores things like: *"Total revenue today = ₹10,00,000"*. The dashboard reads from here. |
 | 🔴 **Redis** | **Speed & Counters** | The fastest. It counts active users and caches your dashboard so it loads instantly (< 10ms). |
-| 🔍 **Elasticsearch** | **Search Engine** | Allows you to search through millions of events by user ID or product ID instantly. |
+| 🔍 **Elasticsearch** | **Search Engine** | **Like a Library Index**. It maps keywords (like `userId`) directly to events so you don't have to "search" through millions of rows. |
+
+---
+
+## 🔍 Deep Dive: How Elasticsearch works?
+Elasticsearch is technically a NoSQL database, but it works like the **Index at the back of a textbook**.
+
+1. **Inverted Index**: Normal databases store: `ID -> Content`. Elasticsearch stores: `Word -> List of IDs`.
+2. **Speed**: Because it knows exactly which IDs contain "user_1", it finds them in milliseconds, even if you have 100 million events.
+3. **Usage**: That's why your **Search Engine** button in the dashboard is so fast — it's not looking at a list; it's looking at a Map!
 
 ### Real-time Flow to Dashboard:
 1.  **Worker** saves to DBs.

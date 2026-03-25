@@ -77,16 +77,20 @@ export class AnalyticsService {
     }
 
     async searchEvents(filters: any): Promise<any> {
-        const { eventType, userId, startDate, endDate, limit = 100 } = filters;
+        const { eventType, userId, eventId, startDate, endDate, limit = 100 } = filters;
 
         const must: any[] = [];
 
         if (eventType) {
-            must.push({ term: { eventType } });
+            must.push({ match: { eventType } });
         }
 
         if (userId) {
-            must.push({ term: { userId } });
+            must.push({ match: { userId } });
+        }
+
+        if (eventId) {
+            must.push({ match: { eventId } });
         }
 
         if (startDate || endDate) {

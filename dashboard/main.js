@@ -52,10 +52,81 @@ document.addEventListener('DOMContentLoaded', () => {
     if (resetBtn) {
         resetBtn.addEventListener('click', handleReset);
         console.log('✅ Reset button listener attached');
-    } else {
-        console.error('❌ Reset button not found!');
+    }
+
+    const searchBtn = document.getElementById('btn-search');
+    if (searchBtn) {
+        searchBtn.addEventListener('click', handleSearch);
+        console.log('✅ Search button listener attached');
     }
 });
+
+// Global function for clickable usernames
+window.quickSearch = (userId) => {
+    const input = document.getElementById('search-userId');
+    if (input) {
+        input.value = userId;
+        handleSearch();
+        // Scroll to search section
+        document.querySelector('.search-section').scrollIntoView({ behavior: 'smooth' });
+    }
+};
+
+async function handleSearch() {
+    const userId = document.getElementById('search-userId').value.trim();
+    const eventId = document.getElementById('search-eventId').value.trim();
+    const eventType = document.getElementById('search-type').value;
+    const resultsList = document.getElementById('search-results');
+    const searchBtn = document.getElementById('btn-search');
+
+    if (!userId && !eventId) {
+        alert('Please enter either a User ID or an Event ID to search.');
+        return;
+    }
+
+    resultsList.innerHTML = '<li class="empty-state">Searching Elasticsearch...</li>';
+    searchBtn.disabled = true;
+    searchBtn.innerText = 'Searching...';
+
+    try {
+        let url = `${QUERY_SERVICE_URL}/search?limit=50`;
+        if (userId) url += `&userId=${userId}`;
+        if (eventId) url += `&eventId=${eventId}`;
+        if (eventType) url += `&eventType=${eventType}`;
+
+        console.log(`🔍 Querying Elasticsearch: ${url}`);
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.events && data.events.length > 0) {
+            resultsList.innerHTML = '';
+            data.events.forEach(event => {
+                const li = document.createElement('li');
+                li.className = 'activity-item';
+                
+                const typeClass = `type-${event.eventType}`;
+                const time = new Date(event.timestamp).toLocaleString();
+
+                li.innerHTML = `
+                    <div class="type-pill ${typeClass}">${event.eventType}</div>
+                    <div class="activity-details">
+                        <p><strong>${event.userId}</strong> on ${event.data.productId || 'system'}</p>
+                        <span class="activity-time">${time} — ID: ${event.eventId}</span>
+                    </div>
+                `;
+                resultsList.appendChild(li);
+            });
+        } else {
+            resultsList.innerHTML = '<li class="empty-state">No results found in Elasticsearch for this User ID</li>';
+        }
+    } catch (error) {
+        console.error('❌ Search failed:', error);
+        resultsList.innerHTML = `<li class="empty-state">Search error: ${error.message}</li>`;
+    } finally {
+        searchBtn.disabled = false;
+        searchBtn.innerText = 'Search Engine';
+    }
+}
 
 async function fetchData() {
     try {
@@ -266,7 +337,7 @@ function updateActivityFeed(events) {
         li.innerHTML = `
             <div class="type-pill ${typeClass}">${event.eventType}</div>
             <div class="activity-details">
-                <p>${event.userId} performed ${event.eventType} on ${event.data.productId || 'system'}</p>
+                <p><span class="clickable-user" onclick="quickSearch('${event.userId}')">${event.userId}</span> performed ${event.eventType} on ${event.data.productId || 'system'}</p>
                 <span class="activity-time">${time} — ID: ${event.eventId.substring(0, 8)}...</span>
             </div>
             ${event.eventType === 'purchase' ? `<div class="rev-val">₹${event.data.amount}</div>` : ''}

@@ -43,7 +43,7 @@ export class EventProcessor {
                 this.elasticsearchRepo.indexEvent(event),
             ]);
 
-            console.log(`✅ Event ${event.eventId} processed successfully`);
+            console.log(`✅ Event ${event.eventId} (User: ${event.userId}) processed successfully`);
         } catch (error) {
             console.error(`❌ Attempt ${attempt} failed for event ${event.eventId}:`, error.message);
 
