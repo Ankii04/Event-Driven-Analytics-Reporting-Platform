@@ -3,7 +3,7 @@
 const axios = require('axios');
 
 const EVENT_INGESTION_URL = process.env.EVENT_INGESTION_URL || 'http://localhost:3001';
-const NUM_EVENTS = parseInt(process.argv[2]) || 1000;
+const NUM_EVENTS = parseInt(process.argv[2]) || 100;
 
 const eventTypes = ['purchase', 'view', 'click', 'add_to_cart', 'search'];
 const products = ['prod_001', 'prod_002', 'prod_003', 'prod_004', 'prod_005'];

@@ -4,12 +4,12 @@
 
 type Mutation {
   login(email: String!, password: String!): String!
+  resetData: String!
   trackEvent(data: String!, eventType: String!, userId: String!): Boolean!
   triggerSeed: String!
-  resetData: String!
 }
 
 type Query {
   activeUsers(timeRange: String!): Float!
-  dailyMetrics(endDate: String!, startDate: String!): String!
+  dailyMetrics(endDate: String, startDate: String!): String!
 }

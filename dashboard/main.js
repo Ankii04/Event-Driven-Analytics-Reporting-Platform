@@ -29,6 +29,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Listeners
     const seedBtn = document.getElementById('btn-seed');
     const resetBtn = document.getElementById('btn-reset');
+    const dateNow = document.getElementById('display-date');
+
+    if (dateNow) {
+        const now = new Date();
+        dateNow.innerText = now.toLocaleDateString('en-US', { 
+            month: 'short', 
+            day: 'numeric', 
+            year: 'numeric' 
+        });
+    }
 
     console.log('🔧 Button elements:', { seedBtn, resetBtn });
 
@@ -274,11 +284,11 @@ async function handleSeed() {
     }
 
     const originalText = btn.innerHTML;
-    btn.innerHTML = '<i data-lucide="loader"></i> Seeding 1000 events...';
+    btn.innerHTML = '<i data-lucide="loader"></i> Seeding 100 events...';
     btn.disabled = true;
 
     try {
-        console.log('📡 Generating 1000 random events...');
+        console.log('📡 Generating 100 random events...');
 
         const eventTypes = ['purchase', 'click', 'view'];
         const products = ['prod_001', 'prod_002', 'prod_003', 'prod_004', 'prod_005'];
@@ -287,7 +297,7 @@ async function handleSeed() {
         let errorCount = 0;
         const batchSize = 50;
 
-        for (let batch = 0; batch < 20; batch++) {
+        for (let batch = 0; batch < 2; batch++) {
             const promises = [];
 
             for (let i = 0; i < batchSize; i++) {
@@ -337,7 +347,7 @@ async function handleSeed() {
             }
 
             await Promise.all(promises);
-            console.log(`Batch ${batch + 1}/20: ${successCount} successful, ${errorCount} errors`);
+            console.log(`Batch ${batch + 1}/2: ${successCount} successful, ${errorCount} errors`);
             btn.innerHTML = `<i data-lucide="loader"></i> Sent ${(batch + 1) * batchSize} events...`;
             if (window.lucide) window.lucide.createIcons();
         }
